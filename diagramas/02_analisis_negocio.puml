@@ -1,0 +1,38 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Trabajadores y entidades del negocio
+allowmixing
+left to right direction
+actor "Vendedor" as V
+actor "Controlador" as C
+actor "Jefe de operaciones" as J
+class "Boleto" as B <<business entity>>
+class "Pasajero" as P <<business entity>>
+class "Cuenta de puntos" as F <<business entity>>
+class "Manifiesto" as M <<business entity>>
+class "Viaje" as T <<business entity>>
+V --> B : vende y entrega
+V --> P : registra identidad
+C --> B : verifica
+C --> M : registra embarques
+J --> T : programa
+B --> T : corresponde
+P --> F : posee
+B --> F : canje o acumulacion
+@enduml

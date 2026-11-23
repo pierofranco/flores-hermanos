@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Despliegue Java y PostgreSQL
+left to right direction
+node "Equipo del usuario" {
+ node "Navegador" as B {
+ artifact "index.html / app.js / style.css" as UI
+ }
+ node "Java 17 o superior" as J {
+ artifact "flores-hermanos.jar\nSpring Boot y Tomcat" as APP
+ }
+ node "PostgreSQL 15 o superior" as PG {
+ database "flores_hermanos\n19 tablas" as DB
+ }
+}
+B -- J : HTTP local 8080
+J -- PG : JDBC / autenticacion SCRAM
+note bottom of PG
+El iniciador usa un cluster dedicado
+en 127.0.0.1:55432. Se conserva al cerrar.
+end note
+note bottom of J
+Pagos y SUTRAN son adaptadores
+de demostracion sin conexion externa.
+end note
+@enduml

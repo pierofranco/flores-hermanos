@@ -1,0 +1,70 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Casos de uso del sistema
+left to right direction
+actor "Pasajero" as P
+actor "Vendedor" as V
+actor "Controlador" as C
+actor "Jefe de operaciones" as J
+actor "Administrador" as A
+rectangle "Sistema Flores Hermanos" {
+ usecase "CU01 Autenticar usuario" as U1
+ usecase "CU02 Consultar itinerarios" as U2
+ usecase "CU03 Registrar pasajero" as U3
+ usecase "CU04 Vender pasaje" as U4
+ usecase "CU05 Procesar pago" as U5
+ usecase "CU06 Aplicar promocion" as U6
+ usecase "CU07 Emitir boleto QR" as U7
+ usecase "CU08 Validar y embarcar" as U8
+ usecase "CU09 Generar manifiesto" as U9
+ usecase "CU10 Acumular puntos" as U10
+ usecase "CU11 Canjear puntos" as U11
+ usecase "CU12 Gestionar recursos y viajes" as U12
+ usecase "CU13 Anular o reprogramar" as U13
+ usecase "CU14 Consultar reportes" as U14
+ usecase "CU15 Consultar cuenta de puntos" as U15
+}
+P -- U1
+P -- U2
+P -- U4
+P -- U13
+P -- U15
+V -- U1
+V -- U3
+V -- U4
+V -- U13
+C -- U1
+C -- U8
+C -- U9
+J -- U1
+J -- U12
+J -- U14
+A -- U12
+A -- U14
+U4 ..> U2 : <<include>>
+U4 ..> U5 : <<include>>
+U4 ..> U7 : <<include>>
+U6 ..> U4 : <<extend>>
+U11 ..> U4 : <<extend>>
+U8 ..> U10 : <<include>>
+note bottom of U3
+Registrar pasajero es independiente.
+En la venta se elige un pasajero existente.
+end note
+@enduml

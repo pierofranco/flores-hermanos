@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Componentes y contratos de la implementacion
+left to right direction
+component "Vista web" as UI
+component "ApiController\nSpring MVC" as API
+component "Servicios de negocio" as S
+component "VentaDao / SqlDao" as D
+interface PaymentGateway as P
+component DemoPaymentGateway as DP
+interface ManifestGateway as M
+component DemoManifestGateway as DM
+database PostgreSQL as DB
+UI ..> API : HTTP JSON
+API ..> S : casos de uso
+S ..> D : persistencia
+D ..> DB : JDBC
+S ..> P
+DP -- P
+S ..> M
+DM -- M
+note bottom of S
+@Transactional delimita las operaciones
+de venta, anulacion y reprogramacion.
+end note
+@enduml

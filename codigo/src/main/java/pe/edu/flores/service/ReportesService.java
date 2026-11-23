@@ -1,0 +1,14 @@
+package pe.edu.flores.service;
+import java.util.*;
+import java.time.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.flores.dao.SqlDao;
+@Service
+public class ReportesService {
+ private final SqlDao db;
+ public ReportesService(SqlDao db){this.db=db;}
+ @Transactional(readOnly=true)public List<Map<String,Object>> trips(){return db.list("SELECT v.*,r.origen,r.destino,r.distancia_km,r.duracion_min,b.placa,b.capacidad,c.nombres AS conductor,(SELECT COUNT(*) FROM boleto t WHERE t.viaje_id=v.id AND t.estado<>'ANULADO') AS vendidos,(SELECT COUNT(*) FROM boleto t WHERE t.viaje_id=v.id AND t.estado='UTILIZADO') AS embarcados FROM viaje v JOIN ruta r ON r.id=v.ruta_id JOIN bus b ON b.id=v.bus_id JOIN conductor c ON c.id=v.conductor_id ORDER BY v.salida");}
+ @Transactional(readOnly=true)public Map<String,Object> report(LocalDate from,LocalDate to){if(to.isBefore(from))throw new BusinessException("El intervalo de fechas no es válido");var start=from.atStartOfDay();var end=to.plusDays(1).atStartOfDay();return Map.of("resumen",db.one("SELECT COUNT(*) AS boletos,COALESCE(SUM(CASE WHEN estado<>'ANULADO' THEN precio_final ELSE 0 END),0) AS ventas,COALESCE(SUM(CASE WHEN estado='UTILIZADO' THEN 1 ELSE 0 END),0) AS embarcados,COALESCE(SUM(CASE WHEN estado='ANULADO' THEN 1 ELSE 0 END),0) AS anulados FROM boleto WHERE fecha_emision>=? AND fecha_emision<?",start,end),"canales",db.list("SELECT canal,COUNT(*) AS boletos,COALESCE(SUM(precio_final),0) AS total FROM boleto WHERE estado<>'ANULADO' AND fecha_emision>=? AND fecha_emision<? GROUP BY canal",start,end),"agencias",db.list("SELECT COALESCE(a.nombre,'Canal web') AS agencia,COUNT(*) AS boletos,COALESCE(SUM(b.precio_final),0) AS total FROM boleto b LEFT JOIN empleado e ON e.id=b.empleado_id LEFT JOIN agencia a ON a.id=e.agencia_id WHERE b.estado<>'ANULADO' AND b.fecha_emision>=? AND b.fecha_emision<? GROUP BY a.nombre",start,end),"puntos",db.list("SELECT tipo,COALESCE(SUM(puntos),0) AS puntos FROM movimiento_puntos WHERE fecha>=? AND fecha<? GROUP BY tipo",start,end),"ocupacion",db.list("SELECT v.id,r.origen,r.destino,v.salida,b.capacidad,COUNT(t.id) AS vendidos FROM viaje v JOIN ruta r ON r.id=v.ruta_id JOIN bus b ON b.id=v.bus_id LEFT JOIN boleto t ON t.viaje_id=v.id AND t.estado<>'ANULADO' WHERE v.salida>=? AND v.salida<? GROUP BY v.id,r.origen,r.destino,v.salida,b.capacidad ORDER BY v.salida",start,end));}
+ public String csv(List<Map<String,Object>> rows){if(rows.isEmpty())return "Sin registros\r\n";var keys=new ArrayList<>(rows.get(0).keySet());StringBuilder s=new StringBuilder("\uFEFF");s.append(String.join(",",keys)).append("\r\n");for(var r:rows){for(int i=0;i<keys.size();i++){if(i>0)s.append(',');String v=Objects.toString(r.get(keys.get(i)),"");if(!v.isEmpty()&&"=+-@\t\r".indexOf(v.charAt(0))>=0)v="'"+v;s.append('"').append(v.replace("\"","\"\"")).append('"');}s.append("\r\n");}return s.toString();}
+}

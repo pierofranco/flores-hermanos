@@ -1,0 +1,59 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo fisico de agencias y embarque
+hide circle
+skinparam linetype ortho
+entity "agencia" as agencia {
+ * id : BIGINT <<PK>>
+ * nombre : VARCHAR(100)
+ * ciudad : VARCHAR(80)
+  direccion : VARCHAR(180)
+  telefono : VARCHAR(20)
+ * activo : BOOLEAN
+}
+entity "empleado" as empleado {
+ * id : BIGINT <<PK>>
+ * agencia_id : BIGINT <<FK>>
+ * nombres : VARCHAR(100)
+ * apellidos : VARCHAR(100)
+ * documento : VARCHAR(15)
+ * cargo : VARCHAR(30)
+ * activo : BOOLEAN
+}
+entity "manifiesto" as manifiesto {
+ * id : BIGINT <<PK>>
+ * viaje_id : BIGINT <<FK>>
+ * total_pasajeros : INTEGER
+ * estado_envio : VARCHAR(20)
+  codigo_respuesta : VARCHAR(100)
+ * intentos : INTEGER
+ * fecha : TIMESTAMP
+}
+entity "embarque" as embarque {
+ * id : BIGINT <<PK>>
+ * boleto_id : BIGINT <<FK>>
+ * manifiesto_id : BIGINT <<FK>>
+ * empleado_id : BIGINT <<FK>>
+ * fecha : TIMESTAMP
+ * estado : VARCHAR(20)
+}
+agencia ||--o{ empleado : agencia_id
+manifiesto ||--o{ embarque : manifiesto_id
+empleado ||--o{ embarque : empleado_id
+@enduml

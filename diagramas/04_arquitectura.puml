@@ -1,0 +1,49 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Arquitectura MVC DAO y capas
+top to bottom direction
+package "Presentacion" {
+ component "Vista web\nindex.html + app.js + style.css" as UI
+}
+package "Control" {
+ component "ApiController\nSpring MVC" as API
+ component "SecurityConfig\nSesion + CSRF + roles" as SEC
+}
+package "Aplicacion y dominio" {
+ component "VentaService / CatalogoService" as S1
+ component "EmbarqueService / FidelizacionService" as S2
+ component "ManifiestoService / ReportesService" as S3
+}
+package "Persistencia DAO" {
+ component VentaDao as DAO
+ component "SqlDao\nJdbcTemplate" as SQL
+}
+database "PostgreSQL\n19 tablas" as DB
+UI --> API : HTTP JSON
+API ..> SEC : autorizacion
+API --> S1
+API --> S2
+API --> S3
+S1 --> DAO
+S1 --> SQL
+S2 --> SQL
+S3 --> SQL
+DAO --> SQL
+SQL --> DB : JDBC parametrizado
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Secuencia de reserva y venta transaccional
+actor Vendedor
+boundary "Vista web" as UI
+control ApiController as API
+control VentaService as S
+entity VentaDao as D
+entity SqlDao as SQL
+database PostgreSQL as DB
+Vendedor -> UI : seleccionar viaje y asiento
+UI -> API : POST /api/reservas
+API -> S : reserve(viaje, asiento)
+S -> D : lockSeat()
+D -> SQL : SELECT ... FOR UPDATE
+SQL -> DB : bloquear fila de inventario
+DB --> S : asiento disponible
+S -> SQL : guardar token, propietario y vence
+S --> UI : token y vencimiento a cinco minutos
+Vendedor -> UI : completar pasajero y pago
+UI -> API : POST /api/ventas
+API -> S : sell(Venta)
+group Transaccion Spring
+ S -> D : lockSeat()
+ D -> DB : SELECT FOR UPDATE
+ S -> S : validar reserva, tarifa y promocion
+ S -> DB : bloquear cuenta de puntos
+ S -> S : autorizar pago simulado
+ S -> SQL : insertar boleto y pago
+ S -> SQL : registrar canje y ocupar asiento
+ SQL -> DB : cambios atomicos
+end
+S --> UI : boleto y token QR
+UI --> Vendedor : imprimir boleto
+note over S,DB
+Cualquier excepcion revierte la transaccion.
+El segundo intento de venta del asiento se rechaza.
+end note
+@enduml

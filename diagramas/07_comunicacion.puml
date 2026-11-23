@@ -1,0 +1,35 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Comunicacion del flujo de venta
+allowmixing
+left to right direction
+object "vista : FormularioVenta" as UI
+object "control : ApiController" as API
+object "venta : VentaService" as VS
+object "datos : VentaDao" as DAO
+object "sql : SqlDao" as SQL
+database "bd : PostgreSQL" as DB
+UI --> API : 1 reservar / 2 vender
+API --> VS : 1.1 reserve / 2.1 sell
+VS --> DAO : 2.2 lockSeat
+DAO --> SQL : 2.2.1 consultar con bloqueo
+SQL --> DB : 2.2.2 SQL parametrizado
+VS --> SQL : 2.3 boleto, pago y canje
+API --> UI : 3 resultado de emision
+@enduml

@@ -1,0 +1,69 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo fisico de logistica
+hide circle
+skinparam linetype ortho
+entity "ruta" as ruta {
+ * id : BIGINT <<PK>>
+ * origen : VARCHAR(80)
+ * destino : VARCHAR(80)
+ * distancia_km : DECIMAL(8,2)
+ * duracion_min : INTEGER
+ * activo : BOOLEAN
+}
+entity "bus" as bus {
+ * id : BIGINT <<PK>>
+ * placa : VARCHAR(12)
+ * marca : VARCHAR(60)
+  modelo : VARCHAR(60)
+ * capacidad : INTEGER
+ * soat_hasta : DATE
+ * revision_hasta : DATE
+ * estado : VARCHAR(20)
+}
+entity "conductor" as conductor {
+ * id : BIGINT <<PK>>
+ * nombres : VARCHAR(100)
+ * apellidos : VARCHAR(100)
+ * licencia : VARCHAR(20)
+ * categoria : VARCHAR(12)
+ * vencimiento : DATE
+ * activo : BOOLEAN
+}
+entity "asiento" as asiento {
+ * id : BIGINT <<PK>>
+ * bus_id : BIGINT <<FK>>
+ * numero : INTEGER
+ * piso : INTEGER
+ * tipo : VARCHAR(24)
+}
+entity "viaje" as viaje {
+ * id : BIGINT <<PK>>
+ * ruta_id : BIGINT <<FK>>
+ * bus_id : BIGINT <<FK>>
+ * conductor_id : BIGINT <<FK>>
+ * salida : TIMESTAMP
+ * precio : DECIMAL(10,2)
+ * estado : VARCHAR(20)
+}
+bus ||--o{ asiento : bus_id
+ruta ||--o{ viaje : ruta_id
+bus ||--o{ viaje : bus_id
+conductor ||--o{ viaje : conductor_id
+@enduml

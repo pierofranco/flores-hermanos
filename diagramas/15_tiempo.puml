@@ -1,0 +1,38 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Cambios de estado durante la venta
+scale 10 as 70 pixels
+robust "Asiento" as A
+robust "Pago simulado" as P
+robust "Boleto" as B
+@0
+A is LIBRE
+P is PENDIENTE
+B is NO_EMITIDO
+@3
+A is RESERVADO
+@55
+P is APROBADO
+@70
+A is VENDIDO
+B is EMITIDO
+@300
+A is VENDIDO
+footer Ejemplo ilustrativo. Venta objetivo menor de 90 s. Sin confirmacion, la reserva vence a los 300 s.
+@enduml

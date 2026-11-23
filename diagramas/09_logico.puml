@@ -1,0 +1,127 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo logico con extensiones de acceso reserva y RSU
+hide circle
+skinparam linetype ortho
+entity "agencia" as agencia {
+ * id : PK
+}
+entity "empleado" as empleado {
+ * id : PK
+ * agencia_id : FK
+}
+entity "pasajero" as pasajero {
+ * id : PK
+}
+entity "ruta" as ruta {
+ * id : PK
+}
+entity "bus" as bus {
+ * id : PK
+}
+entity "conductor" as conductor {
+ * id : PK
+}
+entity "asiento" as asiento {
+ * id : PK
+ * bus_id : FK
+}
+entity "viaje" as viaje {
+ * id : PK
+ * ruta_id : FK
+ * bus_id : FK
+ * conductor_id : FK
+}
+entity "promocion" as promocion {
+ * id : PK
+}
+entity "cuenta_fidelizacion" as cuenta_fidelizacion {
+ * id : PK
+ * pasajero_id : FK
+}
+entity "boleto" as boleto {
+ * id : PK
+ * viaje_id : FK
+ * asiento_id : FK
+ * pasajero_id : FK
+  empleado_id : FK
+  promocion_id : FK
+  reprogramado_desde : FK
+}
+entity "pago" as pago {
+ * id : PK
+ * boleto_id : FK
+}
+entity "movimiento_puntos" as movimiento_puntos {
+ * id : PK
+ * cuenta_id : FK
+  boleto_id : FK
+}
+entity "manifiesto" as manifiesto {
+ * id : PK
+ * viaje_id : FK
+}
+entity "embarque" as embarque {
+ * id : PK
+ * boleto_id : FK
+ * manifiesto_id : FK
+ * empleado_id : FK
+}
+entity "usuario" as usuario {
+ * id : PK
+  empleado_id : FK
+  pasajero_id : FK
+}
+entity "reserva" as reserva {
+ * id : PK
+ * viaje_id : FK
+ * asiento_id : FK
+  boleto_id : FK
+}
+entity "auditoria" as auditoria {
+ * id : PK
+}
+entity "evidencia_rsu" as evidencia_rsu {
+ * id : PK
+}
+agencia ||--o{ empleado : agencia_id
+bus ||--o{ asiento : bus_id
+ruta ||--o{ viaje : ruta_id
+bus ||--o{ viaje : bus_id
+conductor ||--o{ viaje : conductor_id
+pasajero ||--o{ cuenta_fidelizacion : pasajero_id
+viaje ||--o{ boleto : viaje_id
+asiento ||--o{ boleto : asiento_id
+pasajero ||--o{ boleto : pasajero_id
+empleado ||--o{ boleto : empleado_id
+promocion ||--o{ boleto : promocion_id
+boleto ||--o{ boleto : reprogramado_desde
+boleto ||--o{ pago : boleto_id
+cuenta_fidelizacion ||--o{ movimiento_puntos : cuenta_id
+boleto ||--o{ movimiento_puntos : boleto_id
+viaje ||--o{ manifiesto : viaje_id
+boleto ||--o{ embarque : boleto_id
+manifiesto ||--o{ embarque : manifiesto_id
+empleado ||--o{ embarque : empleado_id
+empleado ||--o{ usuario : empleado_id
+pasajero ||--o{ usuario : pasajero_id
+viaje ||--o{ reserva : viaje_id
+asiento ||--o{ reserva : asiento_id
+boleto ||--o{ reserva : boleto_id
+@enduml

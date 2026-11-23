@@ -1,0 +1,40 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Realizacion del caso de uso Vender pasaje
+left to right direction
+class "Formulario de venta" as UI <<boundary>>
+class "ApiController" as API <<control>>
+class "VentaService" as VS <<control>>
+class "FidelizacionService" as FS <<control>>
+class "VentaDao" as D <<DAO>>
+class Pasajero <<entity>>
+class Reserva <<entity>>
+class Boleto <<entity>>
+class Pago <<entity>>
+class "CuentaFidelizacion" as Cuenta <<entity>>
+UI --> API
+API --> VS
+VS --> D
+VS --> FS
+D --> Pasajero
+D --> Reserva
+D --> Boleto
+D --> Pago
+FS --> Cuenta
+@enduml

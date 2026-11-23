@@ -1,0 +1,40 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Estructura compuesta del subsistema de venta
+left to right direction
+rectangle "SubsistemaVenta <<structured classifier>>" {
+ rectangle "vista : FormularioVenta [1]" as UI
+ rectangle "control : ApiController [1]" as API
+ rectangle "servicio : VentaService [1]" as VS
+ rectangle "datos : VentaDao [1]" as DAO
+ rectangle "pago : DemoPaymentGateway [1]" as PAY
+ port "HTTP" as HTTP
+ port "SQL" as JDBC
+ HTTP -- UI : delegacion
+ UI -- API : IVenta
+ API -- VS : ICasosUso
+ VS -- DAO : IRepositorio
+ VS -- PAY : PaymentGateway
+ DAO -- JDBC : delegacion
+}
+note bottom of VS
+La reserva y la emision usan
+la misma unidad transaccional por operacion.
+end note
+@enduml

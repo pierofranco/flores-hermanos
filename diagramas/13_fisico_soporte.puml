@@ -1,0 +1,58 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo fisico de soporte
+hide circle
+skinparam linetype ortho
+entity "usuario" as usuario {
+ * id : BIGINT <<PK>>
+ * usuario : VARCHAR(50)
+ * clave_hash : VARCHAR(100)
+ * rol : VARCHAR(24)
+  empleado_id : BIGINT <<FK>>
+  pasajero_id : BIGINT <<FK>>
+ * activo : BOOLEAN
+ * intentos : INTEGER
+  bloqueado_hasta : TIMESTAMP
+}
+entity "reserva" as reserva {
+ * id : BIGINT <<PK>>
+ * viaje_id : BIGINT <<FK>>
+ * asiento_id : BIGINT <<FK>>
+  boleto_id : BIGINT <<FK>>
+  token : VARCHAR(64)
+  propietario : VARCHAR(50)
+  vence : TIMESTAMP
+}
+entity "auditoria" as auditoria {
+ * id : BIGINT <<PK>>
+ * usuario : VARCHAR(50)
+ * accion : VARCHAR(60)
+ * detalle : VARCHAR(300)
+ * fecha : TIMESTAMP
+}
+entity "evidencia_rsu" as evidencia_rsu {
+ * id : BIGINT <<PK>>
+ * tipo : VARCHAR(30)
+ * titulo : VARCHAR(150)
+ * descripcion : VARCHAR(2000)
+  referencia : VARCHAR(500)
+ * fecha : DATE
+ * registrado_por : VARCHAR(50)
+}
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo del negocio de Flores Hermanos
+left to right direction
+actor Pasajero
+actor "Vendedor de ventanilla" as V
+actor "Controlador de embarque" as C
+actor "Jefe de operaciones" as J
+rectangle "Procesos del negocio" {
+ usecase "CUN01 Comercializar pasajes\ne incentivos de viaje" as A
+ usecase "CUN02 Embarcar y controlar\nmanifiesto de pasajeros" as B
+ usecase "CUN03 Gestionar programa\nde fidelizacion" as D
+}
+Pasajero -- A
+Pasajero -- B
+Pasajero -- D
+V -- A
+C -- B
+J -- B
+A ..> D : incentivo de compra
+B ..> D : acumulacion por viaje
+note bottom of B
+El envio oficial a SUTRAN
+requiere un contrato externo validado.
+end note
+@enduml

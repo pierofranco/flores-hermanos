@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo conceptual de las quince entidades principales
+hide members
+class Agencia
+class Empleado
+class Pasajero
+class Ruta
+class Bus
+class Conductor
+class Asiento
+class Viaje
+class Promocion
+class CuentaFidelizacion
+class Boleto
+class Pago
+class MovimientoPuntos
+class Manifiesto
+class Embarque
+Agencia "1" -- "0..*" Empleado
+Bus "1" -- "0..*" Asiento
+Ruta "1" -- "0..*" Viaje
+Bus "1" -- "0..*" Viaje
+Conductor "1" -- "0..*" Viaje
+Pasajero "1" -- "0..*" CuentaFidelizacion
+Viaje "1" -- "0..*" Boleto
+Asiento "1" -- "0..*" Boleto
+Pasajero "1" -- "0..*" Boleto
+Empleado "1" -- "0..*" Boleto
+Promocion "1" -- "0..*" Boleto
+Boleto "1" -- "0..*" Boleto
+Boleto "1" -- "0..*" Pago
+CuentaFidelizacion "1" -- "0..*" MovimientoPuntos
+Boleto "1" -- "0..*" MovimientoPuntos
+Viaje "1" -- "0..*" Manifiesto
+Boleto "1" -- "0..*" Embarque
+Manifiesto "1" -- "0..*" Embarque
+Empleado "1" -- "0..*" Embarque
+@enduml

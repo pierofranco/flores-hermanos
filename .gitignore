@@ -1,0 +1,11 @@
+**/target/
+**/data/
+**/datos-postgresql/
+**/logs/
+**/config-local.json
+**/work-init-password.tmp
+*.backup
+*.log
+*.jar
+.env
+.env.*

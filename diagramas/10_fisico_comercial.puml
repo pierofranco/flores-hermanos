@@ -1,0 +1,92 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam ArrowColor #395E76
+skinparam classBorderColor #16384D
+skinparam classBackgroundColor #F3F7FA
+skinparam componentBorderColor #16384D
+skinparam componentBackgroundColor #F3F7FA
+skinparam packageBorderColor #9AAEBC
+skinparam packageBackgroundColor #FFFFFF
+skinparam actorBorderColor #16384D
+skinparam usecaseBackgroundColor #F3F7FA
+skinparam usecaseBorderColor #16384D
+skinparam dpi 130
+title Modelo fisico comercial
+hide circle
+skinparam linetype ortho
+entity "pasajero" as pasajero {
+ * id : BIGINT <<PK>>
+ * tipo_documento : VARCHAR(12)
+ * documento : VARCHAR(15)
+ * nombres : VARCHAR(100)
+ * apellidos : VARCHAR(100)
+  telefono : VARCHAR(20)
+  correo : VARCHAR(120)
+ * fecha_registro : TIMESTAMP
+}
+entity "boleto" as boleto {
+ * id : BIGINT <<PK>>
+ * codigo : VARCHAR(20)
+ * qr : VARCHAR(64)
+ * viaje_id : BIGINT <<FK>>
+ * asiento_id : BIGINT <<FK>>
+ * pasajero_id : BIGINT <<FK>>
+  empleado_id : BIGINT <<FK>>
+  promocion_id : BIGINT <<FK>>
+ * canal : VARCHAR(15)
+ * precio_base : DECIMAL(10,2)
+ * descuento : DECIMAL(10,2)
+ * puntos_canjeados : INTEGER
+ * precio_final : DECIMAL(10,2)
+ * estado : VARCHAR(15)
+ * fecha_emision : TIMESTAMP
+  reprogramado_desde : BIGINT <<FK>>
+}
+entity "pago" as pago {
+ * id : BIGINT <<PK>>
+ * boleto_id : BIGINT <<FK>>
+ * metodo : VARCHAR(24)
+ * monto : DECIMAL(10,2)
+  operacion : VARCHAR(80)
+ * estado : VARCHAR(20)
+ * fecha : TIMESTAMP
+ * simulado : BOOLEAN
+}
+entity "promocion" as promocion {
+ * id : BIGINT <<PK>>
+ * nombre : VARCHAR(100)
+ * codigo : VARCHAR(24)
+ * tipo : VARCHAR(20)
+ * valor : DECIMAL(10,2)
+ * desde : DATE
+ * hasta : DATE
+ * activo : BOOLEAN
+}
+entity "cuenta_fidelizacion" as cuenta_fidelizacion {
+ * id : BIGINT <<PK>>
+ * pasajero_id : BIGINT <<FK>>
+ * saldo : INTEGER
+ * nivel : VARCHAR(12)
+ * fecha_alta : DATE
+}
+entity "movimiento_puntos" as movimiento_puntos {
+ * id : BIGINT <<PK>>
+ * cuenta_id : BIGINT <<FK>>
+  boleto_id : BIGINT <<FK>>
+ * tipo : VARCHAR(15)
+ * puntos : INTEGER
+ * fecha : TIMESTAMP
+}
+pasajero ||--o{ boleto : pasajero_id
+promocion ||--o{ boleto : promocion_id
+boleto ||--o{ boleto : reprogramado_desde
+boleto ||--o{ pago : boleto_id
+pasajero ||--o{ cuenta_fidelizacion : pasajero_id
+cuenta_fidelizacion ||--o{ movimiento_puntos : cuenta_id
+boleto ||--o{ movimiento_puntos : boleto_id
+@enduml
